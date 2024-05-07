@@ -15,5 +15,5 @@ public class Article
     public string Title; // 글 제목
     public string Content; // 글 내용
     public int Like; // 좋아요 개수
-    public DateTime WrieTime; // 글 쓴 날짜 / 시간
+    public DateTime WriteTime; // 글 쓴 날짜 / 시간
 }
