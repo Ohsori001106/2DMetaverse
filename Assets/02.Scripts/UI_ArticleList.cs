@@ -15,22 +15,22 @@ public class UI_ArticleList : MonoBehaviour
 
     public void Refresh()
     {
-        // 1. Article¸Å´ÏÀú·ÎºÎÅÍ ArticleÀ» °¡Á®¿Â´Ù.
+        // 1. Articleë§¤ë‹ˆì €ë¡œë¶€í„° Articleì„ ê°€ì ¸ì˜¨ë‹¤.
         List<Article> articles = ArticleManager.Instance.Articles;
 
-        // °Ô½Ã±Û °¹¼ö°¡ 0°³ÀÏ ¶§¸¸ 'Ã¹ ±ÛÀ» ÀÛ¼ºÇØº¸¼¼¿ä' º¸¿©ÁÖ±â
+        // ê²Œì‹œê¸€ ê°¯ìˆ˜ê°€ 0ê°œì¼ ë•Œë§Œ 'ì²« ê¸€ì„ ì‘ì„±í•´ë³´ì„¸ìš”' ë³´ì—¬ì£¼ê¸°
         EmptyObject.gameObject.SetActive(articles.Count == 0);
 
-        // 2. ¸ğµç UI_ArticleÀ» ²ö´Ù.
+        // 2. ëª¨ë“  UI_Articleì„ ëˆë‹¤.
         foreach (UI_Article uiArticle in UIArticles)
         {
             uiArticle.gameObject.SetActive(false);
         }
-        // 3. °¡Á®¿Â Article °³¼ö¸¸Å­ UI_ArticleÀ» Å²´Ù.
+        // 3. ê°€ì ¸ì˜¨ Article ê°œìˆ˜ë§Œí¼ UI_Articleì„ í‚¨ë‹¤.
         for (int i = 0; i < articles.Count &&  i < articles.Count; i++)
         {
             UIArticles[i].gameObject.SetActive(true);
-            // 4. °¢ UI_ArticleÀÇ ³»¿ëÀ» Article·Î ÃÊ±âÈ­(Init)ÇÑ´Ù
+            // 4. ê° UI_Articleì˜ ë‚´ìš©ì„ Articleë¡œ ì´ˆê¸°í™”(Init)í•œë‹¤
             UIArticles[i].Init(articles[i]);
         }
 

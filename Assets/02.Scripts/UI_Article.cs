@@ -5,16 +5,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Article µ¥ÀÌÅÍ¸¦ º¸¿©ÁÖ´Â °ÔÀÓ ¿ÀºêÁ§Æ®
+// Article ë°ì´í„°ë¥¼ ë³´ì—¬ì£¼ëŠ” ê²Œì„ ì˜¤ë¸Œì íŠ¸
 public class UI_Article : MonoBehaviour
 {
-    public Image ProfileImageUI; // ÇÁ·ÎÇÊ ÀÌ¹ÌÁö
+    public Image ProfileImageUI; // í”„ë¡œí•„ ì´ë¯¸ì§€
     
-    public TextMeshProUGUI NameTextUI; // ±Û¾´ÀÌ
+    public TextMeshProUGUI NameTextUI; // ê¸€ì“´ì´
     
-    public TextMeshProUGUI ContentTextUI; // ±Û ³»¿ë
-    public TextMeshProUGUI LikeTextUI; // ÁÁ¾Æ¿ä °³¼ö
-    public TextMeshProUGUI WriteTimeTextUI; // ±Û ¾´ ³¯Â¥ / ½Ã°£
+    public TextMeshProUGUI ContentTextUI; // ê¸€ ë‚´ìš©
+    public TextMeshProUGUI LikeTextUI; // ì¢‹ì•„ìš” ê°œìˆ˜
+    public TextMeshProUGUI WriteTimeTextUI; // ê¸€ ì“´ ë‚ ì§œ / ì‹œê°„
     public void Init(Article article)
     {
         NameTextUI.text = article.Name;

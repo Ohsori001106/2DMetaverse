@@ -1,104 +1,144 @@
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Unity.Mathematics;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
-// 1. ÇÏ³ª¸¸À» º¸Àå
-// 2. ¾îµğ¼­µç ½±°Ô Á¢±Ù °¡´É
+// 1. í•˜ë‚˜ë§Œì„ ë³´ì¥
+// 2. ì–´ë””ì„œë“  ì‰½ê²Œ ì ‘ê·¼ ê°€ëŠ¥
 public class ArticleManager : MonoBehaviour
 {
-    // °Ô½Ã±Û ¸®½ºÆ®
+    // ê²Œì‹œê¸€ ë¦¬ìŠ¤íŠ¸
     private List<Article> _articles = new List<Article>();
     public List<Article> Articles => _articles;
 
+    public UI_ArticleList UI_ArticleList;
     public static ArticleManager Instance { get; private set; }
     private void Awake()
     {
         Instance = this;
 
-        /*_articles.Add(new Article()
-        {
-            Name = "±èÈ«ÀÏ",
-            Content = "¾È³çÇÏ¼¼¿ä.",
-            ArticleType = ArticleType.Normal,
-            Like =  20,
-            WriteTime =  DateTime.Now
-        }); 
-        _articles.Add(new Article()
-        {
-            Name = "¹Î¿¹Áø",
-            Content = "ÇÏÀÌ",
-            ArticleType = ArticleType.Normal,
-            Like = 7,
-            WriteTime = DateTime.Now
-        });
-        _articles.Add(new Article()
-        {
-            Name = "Á¶Èñ¼ö",
-            Content = "ÇØ»ß:)",
-            ArticleType = ArticleType.Normal,
-            Like = 908,
-            WriteTime = DateTime.Now
+        
 
-        });
-        _articles.Add(new Article()
-        {
-            Name = "°í½Â¿¬",
-            Content = "¾È³çÇÏ¼¼~",
-            ArticleType = ArticleType.Normal,
-            Like = 20,
-            WriteTime = DateTime.Now
-        });
-        _articles.Add(new Article()
-        {
-            Name = "ÀÌÅÂÈ¯",
-            Content = "³ª´Â Àü¼³ÀÌ´Ù.",
-            ArticleType = ArticleType.Normal,
-            Like = 320,
-            WriteTime = DateTime.Now
-        });
-        _articles.Add(new Article()
-        {
-            Name = "ÀÌ¼º¹Î",
-            Content = "³ª´Â Â¯ÀÌ´Ù.",
-            ArticleType = ArticleType.Normal,
-            Like = 30,
-            WriteTime = DateTime.Now
-        });
-        _articles.Add(new Article()
-        {
-            Name = "96³â»ıÁ¤¼ºÈÆ",
-            Content = "ÇÏÀÌ·ç¹æ°¡¹æ°¡",
-            ArticleType = ArticleType.Normal,
-            Like = 20,
-            WriteTime = DateTime.Now
-        });*/
+        // ëª½ê³  DBë¡œë¶€í„° article ì¡°íšŒ
+        string connectionString = "mongodb+srv://qwer7495:qwer7431@cluster0.tbmc7hw.mongodb.net/";
+        // 1. ëª½ê³ DB ì—°ê²°
+        MongoClient mongoClient = new MongoClient(connectionString);
+        // 2. íŠ¹ì • ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²°
+        IMongoDatabase sampleDB = mongoClient.GetDatabase("metaverse");
+        // 3. íŠ¹ì • ì½œë ‰ì…˜ ì—°ê²°
+        var article = sampleDB.GetCollection<BsonDocument>("articles");
 
-        // JSONÀÌ¶õ ÀÚ¹Ù½ºÅ©¸³Æ® °´Ã¼ Ç¥±â¹ıÀ¸·Î ¿äÁò °¡Àå ¸¹ÀÌ »ç¿ëÇÏ´Â
-        //         µ¥ÀÌÅÍ ÅØ½ºÆ® ±¸Á¶
-        // C#ÀÇ µñ¼Å³Ê¸®¸¦ Ç¥ÇöÇÏ´Â ¹æ¹ı°ú ºñ½ÁÇÏ´Ù.
-        // "Å°":"¹ë·ù" ÇüÅÂÀÇ µ¥ÀÌÅÍ¸¦ °´Ã¼({})¿Í ¹è¿­([])ÀÇ Á¶ÇÕÀ¸·Î Ç¥ÇöÇÑ´Ù.
+        // 4. ëª¨ë“  ë¬¸ì„œ ì½ì–´ì˜¤ê¸°
+        List<BsonDocument> datas = article.Find(new BsonDocument()).ToList();
 
-        // À¯´ÏÆ¼ÀÇ Æ¯º°ÇÑ ÆÄÀÏ ÀúÀå °æ·Î
-        // À¯´ÏÆ¼¸¸ÀÌ ¾µ ¼ö ÀÖ´Â ÆÄÀÏ ÀúÀå °æ·Î¸¦ °¡Áö°í ÀÖ´Ù.
-        Debug.Log(Application.persistentDataPath);
-        string path = Application.persistentDataPath;
 
-        // 1. °´Ã¼¸¦ JsonÆ÷¸ËÀÇ ÅØ½º¸£·Î º¯È¯ÇÑ ´ÙÀ½ ÆÄÀÏ 'data.txt'¿¡ ÀúÀåÇÑ´Ù.
-        // jsonÀº ÀÏ¹İ Å¬·¡½º´Â Á÷·ÄÈ­ÇÒ ¼ö ÀÖÁö¸¸ ¸®½ºÆ® ±× ÀÚÃ¼´Â Á÷·ÄÈ­¸¦ ¸øÇÑ´Ù.
-        // ÀÏ¹İ Å¬·¡½º·Î ¸®½ºÆ®¸¦ µ¤¾î ¾º¿î´Ù.
-        /*ArticleData articleData = new ArticleData(_articles);
-        string jsonData = JsonUtility.ToJson(articleData);
-        Debug.Log(jsonData);
-        StreamWriter sw = File.CreateText($"{path}/data.txt");
-        sw.Write(jsonData);
-        sw.Close();*/
 
-        // 2. µ¥ÀÌÅÍ¸¦ ÇÏµåÄÚµùÇÑ ÄÚµå¸¦ Áö¿î´Ù.
-        // 3. 'data.txt'·ÎºÎÅÍ jsonÀ» ÀĞ¾î¿Í¼­ °´Ã¼µéÀ» ÃÊ±âÈ­ÇÑ´Ù.
-        string txt = File.ReadAllText($"{path}/data.txt");
-        _articles = JsonUtility.FromJson<ArticleData>(txt).Data;
+        // 5. ì½ì–´ì˜¨ ë¬¸ì„œ ë§Œí¼ New Article()í•´ì„œ ë°ì´í„° ì±„ìš°ê³ 
+        _articles.Clear();
+
+        foreach (var data in datas)
+        {
+            
+            Article art = new Article();
+            art.Name = data["Name"].ToString();
+            art.Content = data["Content"].ToString();
+            art.Like = (int)data["Like"];
+            art.WriteTime = DateTime.Parse(data["WriteTime"].AsString);
+            
+            art.ArticleType = (ArticleType)(int)data["ArticleType"];
+            //    _articlesì— ë„£ê¸°+
+            
+            _articles.Add(art);
+
+            
+        }
+        
+        
+
+
+    }
+
+    public void OnClikNotice()
+    {
+        UI_ArticleList.Refresh();
+        _articles.Clear();
+        // ëª½ê³  DBë¡œë¶€í„° article ì¡°íšŒ
+        string connectionString = "mongodb+srv://qwer7495:qwer7431@cluster0.tbmc7hw.mongodb.net/";
+        // 1. ëª½ê³ DB ì—°ê²°
+        MongoClient mongoClient = new MongoClient(connectionString);
+        // 2. íŠ¹ì • ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²°
+        IMongoDatabase sampleDB = mongoClient.GetDatabase("metaverse");
+        // 3. íŠ¹ì • ì½œë ‰ì…˜ ì—°ê²°
+        var article = sampleDB.GetCollection<BsonDocument>("articles");
+
+        // 4. ëª¨ë“  ë¬¸ì„œ ì½ì–´ì˜¤ê¸°
+        var filter2 = Builders<BsonDocument>.Filter.Eq("ArticleType", 1);
+
+        List<BsonDocument> datas = article.Find(filter2).ToList();
+
+
+        foreach (var data in datas)
+        {
+            Article art = new Article();
+            art.Name = data["Name"].ToString();
+            art.Content = data["Content"].ToString();
+            art.Like = (int)data["Like"];
+            art.WriteTime = DateTime.Parse(data["WriteTime"].AsString);
+
+            art.ArticleType = (ArticleType)(int)data["ArticleType"];
+
+
+                _articles.Add(art);
+            
+           
+
+
+        }
+    }
+
+    public void OnClikAllView()
+    {
+        UI_ArticleList.Refresh();
+        _articles.Clear();
+        // ëª½ê³  DBë¡œë¶€í„° article ì¡°íšŒ
+        string connectionString = "mongodb+srv://qwer7495:qwer7431@cluster0.tbmc7hw.mongodb.net/";
+        // 1. ëª½ê³ DB ì—°ê²°
+        MongoClient mongoClient = new MongoClient(connectionString);
+        // 2. íŠ¹ì • ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²°
+        IMongoDatabase sampleDB = mongoClient.GetDatabase("metaverse");
+        // 3. íŠ¹ì • ì½œë ‰ì…˜ ì—°ê²°
+        var article = sampleDB.GetCollection<BsonDocument>("articles");
+
+        // 4. ëª¨ë“  ë¬¸ì„œ ì½ì–´ì˜¤ê¸°
+        List<BsonDocument> datas = article.Find(new BsonDocument()).ToList();
+
+
+
+        // 5. ì½ì–´ì˜¨ ë¬¸ì„œ ë§Œí¼ New Article()í•´ì„œ ë°ì´í„° ì±„ìš°ê³ 
+        
+
+        foreach (var data in datas)
+        {
+
+            Article art = new Article();
+            art.Name = data["Name"].ToString();
+            art.Content = data["Content"].ToString();
+            art.Like = (int)data["Like"];
+            art.WriteTime = DateTime.Parse(data["WriteTime"].AsString);
+
+            art.ArticleType = (ArticleType)(int)data["ArticleType"];
+            //    _articlesì— ë„£ê¸°+
+
+            _articles.Add(art);
+
+
+        }
     }
 }
+

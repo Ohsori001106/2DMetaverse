@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// MVC ¾ÆÅ°ÅØÃ³ ÆĞÅÏ
-// - Model (µ¥ÀÌÅÍ¿Í ±× µ¥ÀÌÅÍ¸¦ ´Ù·ç´Â ·ÎÁ÷) -> Article
-// - View  (UI, »ç¿ëÀÚ ÀÎÅÍÆäÀÌ½º)            -> UI_Article, UI_ArticleList
-// - Controller (°ü¸®ÀÚ, Model <-> View ÁßÀçÀÚ) -> ArticleManager , °ü¸®: »ğÀÔ,»èÁ¦,¼öÁ¤
-// À§ ¿ä¼Òµé(µ¥ÀÌÅÍ, ½Ã°¢Àû, °ü¸®)ÀÇ °£¼·¾øÀÌ µ¶¸³ÀûÀ¸·Î °³¹ßÇÒ ¼ö ÀÖ´Ù.
+// MVC ì•„í‚¤í…ì²˜ íŒ¨í„´
+// - Model (ë°ì´í„°ì™€ ê·¸ ë°ì´í„°ë¥¼ ë‹¤ë£¨ëŠ” ë¡œì§) -> Article
+// - View  (UI, ì‚¬ìš©ì ì¸í„°í˜ì´ìŠ¤)            -> UI_Article, UI_ArticleList
+// - Controller (ê´€ë¦¬ì, Model <-> View ì¤‘ì¬ì) -> ArticleManager , ê´€ë¦¬: ì‚½ì…,ì‚­ì œ,ìˆ˜ì •
+// ìœ„ ìš”ì†Œë“¤(ë°ì´í„°, ì‹œê°ì , ê´€ë¦¬)ì˜ ê°„ì„­ì—†ì´ ë…ë¦½ì ìœ¼ë¡œ ê°œë°œí•  ìˆ˜ ìˆë‹¤.
 
 public enum ArticleType
 {
@@ -19,11 +19,13 @@ public enum ArticleType
 public class Article
 {
     public ArticleType ArticleType;
-    public string Name; // ±Û¾´ÀÌ
-    public string Title; // ±Û Á¦¸ñ
-    public string Content; // ±Û ³»¿ë
-    public int Like; // ÁÁ¾Æ¿ä °³¼ö
-    public DateTime WriteTime; // ±Û ¾´ ³¯Â¥ / ½Ã°£
+    public string Name; // ê¸€ì“´ì´
+    public string Title; // ê¸€ ì œëª©
+    public string Content; // ê¸€ ë‚´ìš©
+    public int Like; // ì¢‹ì•„ìš” ê°œìˆ˜
+    public DateTime WriteTime; // ê¸€ ì“´ ë‚ ì§œ / ì‹œê°„
+
+    
 }
 
 [Serializable]

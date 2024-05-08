@@ -9,40 +9,53 @@ public class MongoExample01 : MonoBehaviour
     
     void Start()
     {
-        // ¸ù°í µ¥ÀÌÅÍº£ÀÌ½º¿¡ ¿¬°á
-        // ¿¬°á ¹®ÀÚ¿­: µ¥ÀÌÅÍº£ÀÌ½º ¿¬°áÀ» À§ÇÑ Á¤º¸°¡ ´ã°ÜÀÖ´Â ¹®ÀÚ¿­
-        string connectionString = "mongodb+srv://qwer7495:qwer7431@cluster0.tbmc7hw.mongodb.net/";
-        // - ÇÁ·ÎÅäÄİ: mongodb+srv
-        // - ¾ÆÀÌµğ: qwer7495
-        // - ºñ¹Ğ¹øÈ£:qwer7431
-        // - ÁÖ¼Ò: cluster0.tbmc7hw.mongodb.net
+        // var: ì•”ì‹œì  íƒ€ì…ìœ¼ë¡œì¨ ë°ì´í„°ì˜ ìë£Œí˜•ì„ ìë™ìœ¼ë¡œ ì„¤ì •í•˜ëŠ” í‚¤ì›Œë“œ
+        // r-valueë¡œ ë¶€í„° ìë™ìœ¼ë¡œ íƒ€ì…ì„ ìœ ì¶”
+        // ì„ ì–¸í•  ë•Œ ì´ˆê¸°ê°’ì´ ìˆì–´ì•¼í•¨
+        // ì¥ì : ê°„ë‹¨í•˜ë‹¤.
+        // ë‹¨ì : ìë£Œí˜•ì´ ëª…í™•í•˜ì§€ ì•Šì•„ì„œ íœ´ë¨¼ ì—ëŸ¬ê°€ ë‚  ìˆ˜ ìˆë‹¤.
+        // ì–¸ì œì“°ë©´ ì¢‹ëƒ?: 1. ìë£Œí˜•ì´ ë„ˆë¬´ ê¸¸ ê²½ìš°
+        //                 2. foreach ë°˜ë³µë¬¸ì—ì„œ ëª…í™•í•  ê²½ìš°
+        List<Article> articles = new List<Article>();
+        foreach (var article in articles)
+        {
 
-        // 1. Á¢¼Ó
+        }
+
+        // ëª½ê³  ë°ì´í„°ë² ì´ìŠ¤ì— ì—°ê²°
+        // ì—°ê²° ë¬¸ìì—´: ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²°ì„ ìœ„í•œ ì •ë³´ê°€ ë‹´ê²¨ìˆëŠ” ë¬¸ìì—´
+        string connectionString = "mongodb+srv://qwer7495:qwer7431@cluster0.tbmc7hw.mongodb.net/";
+        // - í”„ë¡œí† ì½œ: mongodb+srv
+        // - ì•„ì´ë””: qwer7495
+        // - ë¹„ë°€ë²ˆí˜¸:qwer7431
+        // - ì£¼ì†Œ: cluster0.tbmc7hw.mongodb.net
+
+        // 1. ì ‘ì†
         MongoClient mongoClient = new MongoClient(connectionString);
 
-        // 2. µ¥ÀÌÅÍº£ÀÌ½º°¡ ¹¹¹¹ÀÖÁö?
+        // 2. ë°ì´í„°ë² ì´ìŠ¤ê°€ ë­ë­ìˆì§€?
         List<BsonDocument> dbList = mongoClient.ListDatabases().ToList();
         foreach(BsonDocument db in dbList)
         {
             Debug.Log(db["name"]);
         }
 
-        // 3. Æ¯Á¤ µ¥ÀÌÅÍº£ÀÌ½º¿¡ ¿¬°á
+        // 3. íŠ¹ì • ë°ì´í„°ë² ì´ìŠ¤ì— ì—°ê²°
         IMongoDatabase sampleDB = mongoClient.GetDatabase("sample_mflix");
 
-        // 4. Äİ·º¼Çµé ÀÌ¸§ È®ÀÎ
+        // 4. ì½œë ‰ì…˜ë“¤ ì´ë¦„ í™•ì¸
         List<string> collectionNames = sampleDB.ListCollectionNames().ToList();
         foreach(string name in collectionNames)
         {
             Debug.Log(name);
         }
 
-        // 5. Äİ·º¼Ç ¿¬°á
-        /*IMongoCollection<BsonDocument>*/var movieCollection = sampleDB.GetCollection<BsonDocument>("movies");
+        // 5. ì½œë ‰ì…˜ ì—°ê²°
+        var movieCollection = sampleDB.GetCollection<BsonDocument>("movies");
         long count = movieCollection.CountDocuments(new BsonDocument());
-        Debug.Log($"¿µÈ­ °³¼ö: {count}");
+        Debug.Log($"ì˜í™” ê°œìˆ˜: {count}");
 
-        // 6. µµÅ¥¸ÕÆ® ÇÏ³ª¸¸ ÀĞ±â
+        // 6. ë„íë¨¼íŠ¸ í•˜ë‚˜ë§Œ ì½ê¸°
          var firstDoc = movieCollection.Find(new BsonDocument()).FirstOrDefault();
         Debug.Log(firstDoc["plit"]);
 
@@ -50,9 +63,4 @@ public class MongoExample01 : MonoBehaviour
 
 
 
-
-    void Update()
-    {
-        
-    }
 }
