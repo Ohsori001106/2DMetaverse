@@ -49,7 +49,7 @@ public class ArticleManager : MonoBehaviour
             art.Name = data["Name"].ToString();
             art.Content = data["Content"].ToString();
             art.Like = (int)data["Like"];
-            art.WriteTime = DateTime.Parse(data["WriteTime"].AsString);
+            art.WriteTime = DateTime.Parse(data["WriteTime"].ToString());
             
             art.ArticleType = (ArticleType)(int)data["ArticleType"];
             //    _articles에 넣기+
@@ -89,7 +89,7 @@ public class ArticleManager : MonoBehaviour
             art.Name = data["Name"].ToString();
             art.Content = data["Content"].ToString();
             art.Like = (int)data["Like"];
-            art.WriteTime = DateTime.Parse(data["WriteTime"].AsString);
+            art.WriteTime = DateTime.Parse(data["WriteTime"].ToString());
 
             art.ArticleType = (ArticleType)(int)data["ArticleType"];
 
@@ -130,7 +130,7 @@ public class ArticleManager : MonoBehaviour
             art.Name = data["Name"].ToString();
             art.Content = data["Content"].ToString();
             art.Like = (int)data["Like"];
-            art.WriteTime = DateTime.Parse(data["WriteTime"].AsString);
+            art.WriteTime = DateTime.Parse(data["WriteTime"].ToString());
 
             art.ArticleType = (ArticleType)(int)data["ArticleType"];
             //    _articles에 넣기+

@@ -21,7 +21,24 @@ public class UI_Article : MonoBehaviour
         
         ContentTextUI.text = article.Content;
         LikeTextUI.text = $"{article.Like}";
-        WriteTimeTextUI.text = $"{ article.WriteTime}";
+        WriteTimeTextUI.text = GetTimeString(article.WriteTime);
+    }
+
+    private string GetTimeString(DateTime dateTime)
+    {
+        TimeSpan time = DateTime.Now - dateTime;
+        if (time.Minutes < 1)
+            return "방금 전";
+        else if (time.Hours < 1 && time.Days == 0)
+            return $"{time.Minutes}분 전";
+        else if (time.Days < 1)
+            return $"{time.Hours}시간 전";
+        else if (time.Days < 7)
+            return $"{time.Days}일 전";
+        else return $"{dateTime}";
+        
+
+        
     }
 
 }
