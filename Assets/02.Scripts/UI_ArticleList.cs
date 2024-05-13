@@ -7,12 +7,23 @@ public class UI_ArticleList : MonoBehaviour
 {
     public List<UI_Article> UIArticles;
     public GameObject EmptyObject;
+    public UI_ArticleWrite ArticleWRiteUI;
 
+    public static UI_ArticleList Instance { get; private set; }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         Refresh();
     }
-
+    public void Show()
+    {
+        gameObject.SetActive(true);
+        Refresh();
+    }
     public void Refresh()
     {
         // 1. Article매니저로부터 Article을 가져온다.
@@ -35,5 +46,22 @@ public class UI_ArticleList : MonoBehaviour
         }
 
         
+    }
+    public void OnClickAllButton()
+    {
+        ArticleManager.Instance.FindAll();
+        Refresh();
+    }
+
+    // 공지 버튼을 클릭했을 때 호출되는 함수
+    public void OnClickNoticeButton()
+    {
+        ArticleManager.Instance.FindNotice();
+        Refresh();
+    }
+    public void OnClickWriteButton()
+    {
+        gameObject.SetActive(false);
+        ArticleWRiteUI.gameObject.SetActive(true);
     }
 }

@@ -2,8 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using MongoDB.Driver;
+using static UnityEngine.ParticleSystem;
 
 // Article 데이터를 보여주는 게임 오브젝트
 public class UI_Article : MonoBehaviour
@@ -15,6 +18,10 @@ public class UI_Article : MonoBehaviour
     public TextMeshProUGUI ContentTextUI; // 글 내용
     public TextMeshProUGUI LikeTextUI; // 좋아요 개수
     public TextMeshProUGUI WriteTimeTextUI; // 글 쓴 날짜 / 시간
+
+    public UI_ArticleMenu MenuUI;
+
+    private Article _article;
     public void Init(Article article)
     {
         NameTextUI.text = article.Name;
@@ -36,9 +43,19 @@ public class UI_Article : MonoBehaviour
         else if (time.Days < 7)
             return $"{time.Days}일 전";
         else return $"{dateTime}";
-        
-
-        
     }
 
+    public void OnClickMenuButton()
+    {
+        MenuUI.Show(_article);
+    }
+
+    public void OnClickLikeButton()
+    {
+        // 1. 데이터 조작은 항상 매니저에게 시킨다.
+        ArticleManager.Instance.AddLike(_article);
+
+        ArticleManager.Instance.FindAll();
+        UI_ArticleList.Instance.Refresh();
+    }
 }
